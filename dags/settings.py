@@ -12,6 +12,8 @@ TEST_SIZE = os.getenv('TEST_SIZE', 0.3)
 RANDOM_STATE = os.getenv('RANDOM_STATE', 42)
 MONGO_DB = os.getenv('MONGO_DB', 'test_db')
 MONGO_COLLECTION = os.getenv('MONGO_COLLECTION', 'test_collection')
+N_ESTIMATORS = os.getenv('N_ESTIMATORS', 10)
+CRITERION = os.getenv('CRITERION', 'entropy')
 
 default_args = {
     'owner': os.getenv('OWNER', 'airflow'),

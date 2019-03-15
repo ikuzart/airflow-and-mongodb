@@ -8,5 +8,6 @@ dependencies:
   - pymongo
   - scikit-learn
   - pip:
+      - apache-airflow
       - python-dotenv
 
