@@ -1,0 +1,12 @@
+name: test
+channels:
+  - defaults
+dependencies:
+  - python=3.6.8
+  - pandas
+  - seaborn
+  - pymongo
+  - scikit-learn
+  - pip:
+      - python-dotenv
+

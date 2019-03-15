@@ -1,4 +1,5 @@
 import json
+import os
 from typing import Any, Dict
 
 from data import DataContainer
@@ -6,14 +7,13 @@ from data import DataContainer
 import pandas as pd
 from pymongo import MongoClient
 
-
-URI = 'mongodb://localhost:27017/'
+MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
 
 
 class MongoClientWrapper:
 
     def __init__(self):
-        self.client = MongoClient(URI)
+        self.client = MongoClient(MONGO_URI)
 
     def insert_one(self, document, db, collection):
         db_ = self.client[db]

@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
@@ -7,15 +5,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from data import DataContainer
 from data_preprocessing import BreastCancerData, BreastCancerDataLoader, BreastCancerDataPreprocessor
 from mongo_wrapper import MongoClientWrapper
-
-
-default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'start_date': datetime.now(),
-    'retries': 0,
-    'max_active_runs': 1
-}
+from settings import TEST_SIZE, RANDOM_STATE, MONGO_DB, MONGO_COLLECTION, default_args
 
 
 def data_preprocessing():
@@ -25,9 +15,9 @@ def data_preprocessing():
     data_loader = BreastCancerDataLoader()
     data_to_preprocess = BreastCancerData(data_loader)
     preproc = BreastCancerDataPreprocessor(data_to_preprocess, data_container)
-    preprocessed_data = preproc.preprocess(0.3, 42)
+    preprocessed_data = preproc.preprocess(TEST_SIZE, RANDOM_STATE)
     document_to_save = mongo_client_wrapper.make_document_from_data_container(preprocessed_data)
-    mongo_client_wrapper.insert_one(document_to_save, 'test2', 'test2')
+    mongo_client_wrapper.insert_one(document_to_save, MONGO_DB, MONGO_COLLECTION)
 
     return
 
@@ -36,7 +26,7 @@ def model_training():
     return 'model training'
 
 
-dag = DAG('test_project', default_args=default_args)
+dag = DAG('test_project', default_args=default_args, schedule_interval=None)
 
 
 preprocessing_operator = PythonOperator(task_id='data_preprocessing', python_callable=data_preprocessing, dag=dag)
